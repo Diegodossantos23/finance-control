@@ -1,17 +1,13 @@
-import styled from 'styled-components';
+import React from 'react';
+import { Header } from './components/Header';
 import { GlobalStyle } from './styles/global';
 
-const Title = styled.h1`
-  font-size: 64px;
-  color: #8257e6;
-`;
-
-function App() {
+export const App: React.FC = () => {
   return (
-    <div className="App">
-      <Title>Hello World!</Title>
+    <React.Fragment>
+      <Header/>
       <GlobalStyle/>
-    </div>
+    </React.Fragment>
   );
 }
 
