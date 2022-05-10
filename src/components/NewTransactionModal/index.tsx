@@ -2,7 +2,8 @@ import Modal from 'react-modal';
 import incomeIcon from '../../assets/income.svg';
 import outcomeIcon from '../../assets/outcome.svg';
 import closeIcon from '../../assets/close.svg';
-import { Container, TransactionTypeContainer } from './styles';
+import { Container, TransactionTypeContainer, RadioBox } from './styles';
+import { useState } from 'react';
 
 interface NewTransactionModalProps {
     isOpen: boolean;
@@ -10,16 +11,24 @@ interface NewTransactionModalProps {
 }
 
 export const NewTransactionModal = ({ isOpen, onRequestClose }: NewTransactionModalProps ) => {
-    return(
+  const [ type, setType ] = useState('deposit');  
+  
+  return(
         <Modal 
-        isOpen={isOpen} 
-        onRequestClose={onRequestClose}
-        overlayClassName="react-modal-overlay"
-        className="react-modal-content"
-      >
-        <button type="button" onClick={onRequestClose} className="react-modal-close">
+          isOpen={isOpen} 
+          onRequestClose={onRequestClose}
+          overlayClassName="react-modal-overlay"
+          className="react-modal-content"
+        >
+
+        <button 
+          type="button" 
+          onClick={onRequestClose} 
+          className="react-modal-close"
+        >
           <img src={closeIcon} alt="" />
         </button>
+
         <Container>
           <h2>Register Transaction</h2>
 
@@ -27,16 +36,25 @@ export const NewTransactionModal = ({ isOpen, onRequestClose }: NewTransactionMo
           <input type="number" placeholder='Value'/>
 
           <TransactionTypeContainer>
-            <button type='button'>
+            <RadioBox 
+              type='button' 
+              onClick={() => setType('deposit')}
+              isActive={type === 'deposit'}
+            >
               <img src={incomeIcon} alt="Income" />
               <span>Income</span>
-            </button>
+            </RadioBox>
 
-            <button type='button'>
+            <RadioBox 
+              type='button' 
+              onClick={() => setType('withdraw')}
+              isActive={type === 'withdraw'}
+            >
               <img src={outcomeIcon} alt="Outcome" />
               <span>Outcome</span>
-            </button>
+            </RadioBox>
           </TransactionTypeContainer>
+          
           <input type="text" placeholder='Category'/>
 
           <button type="submit">Register</button>
