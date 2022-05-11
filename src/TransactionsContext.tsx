@@ -17,9 +17,9 @@ interface Transaction {
     category: string;
 }*/
 
-// type TransactionInput = Omit<Transaction, 'id | 'createdAt>;
+type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>;
 
-type TransactionInput = Pick<Transaction, 'title' | 'amount' | 'type' | 'category'>;
+//type TransactionInput = Pick<Transaction, 'title' | 'amount' | 'type' | 'category'>;
 
 interface TransactionsProviderProps {
     children: ReactNode;
@@ -27,7 +27,7 @@ interface TransactionsProviderProps {
 
 interface TransactionsContextData {
     transactions: Transaction[];
-    createTransaction: (transaction: TransactionInput) => void;
+    createTransaction: (transaction: TransactionInput) => Promise<void>;
 }
 
 export const TransactionsContext = createContext<TransactionsContextData>(
@@ -42,8 +42,18 @@ export const TransactionsProvider = ({ children }: TransactionsProviderProps) =>
         .then((response: any) =>setTransactions(response.data.transactions))
     }, []);
 
-    const createTransaction = (transaction: TransactionInput) => {
-          api.post('/transactions', transaction);
+    async function createTransaction(transactionInput: TransactionInput) {
+         const response = await api.post('/transactions', {
+             ...transactionInput,
+             createdAt: new Date(),
+         });
+         
+        const { transaction } = response.data;
+
+        setTransactions([
+            ...transactions,
+            transaction
+        ]);
     }
 
     return (
